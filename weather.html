@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather - Krishi Sakhi</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background-color: #2f6d35;
+      color: white;
+      position: fixed; top: 0; left: 0; bottom: 0;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 20px 0;
+    }
+    .sidebar img { width: 100px; border-radius: 50%; margin-bottom: 10px; }
+    .sidebar h2 { font-size: 20px; margin-bottom: 30px; text-align: center; }
+    .sidebar a {
+      text-decoration: none; color: white;
+      display: block; width: 100%; padding: 12px 20px; text-align: center;
+    }
+    .sidebar a:hover, .sidebar a.active { background-color: #3d8a45; }
+
+    /* Main */
+    .main {
+      margin-left: 220px; flex-grow: 1; padding: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    /* Search */
+    .search-bar {
+      display: flex; flex-direction: column; align-items: center;
+      margin-bottom: 20px; gap: 10px;
+    }
+    .search-bar select, .search-bar input, .search-bar button {
+      padding: 10px; border: 1px solid #ccc;
+      border-radius: 8px; outline: none; font-size: 14px;
+    }
+    .search-bar button {
+      background: #2f6d35; color: white;
+      cursor: pointer; border: none;
+    }
+
+    .hidden { display: none; }
+
+    .current-weather {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px;
+      flex-wrap: wrap;
+    }
+    .current-temp { font-size: 50px; font-weight: bold; }
+    .current-info { font-size: 15px; line-height: 1.6; }
+
+    .extra-details {
+      margin-top: 15px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      font-size: 14px;
+      background: #fafafa;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    .tabs {
+      display: flex; justify-content: center;
+      margin-top: 20px;
+      border-bottom: 1px solid #ccc;
+    }
+    .tabs button {
+      background: none; border: none; color: #555;
+      padding: 10px 20px; cursor: pointer; font-size: 16px;
+    }
+    .tabs button.active { color: #2f6d35; border-bottom: 2px solid #2f6d35; }
+
+    .chart-container { margin: 20px 0; }
+    canvas { background: #fafafa; border-radius: 10px; padding: 10px; }
+
+    /* Forecast row */
+    .forecast {
+      display: flex;
+      flex-direction: row;
+      gap: 12px;
+      margin-top: 25px;
+      overflow-x: auto;
+      white-space: nowrap;
+      padding-bottom: 10px;
+    }
+    .forecast::-webkit-scrollbar {
+      height: 8px;
+    }
+    .forecast::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 4px;
+    }
+    .forecast::-webkit-scrollbar-track {
+      background: #f5f5f5;
+    }
+
+    .day-card {
+      background: #fafafa;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      min-width: 140px;
+      border: 1px solid #eee;
+      flex: 0 0 auto;
+    }
+    .day-card img { width: 40px; }
+    .day-temp { margin-top: 8px; font-weight: bold; }
+    .day-extra { font-size: 13px; margin-top: 6px; }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <img src="logo.png" alt="Logo" />
+    <h2>Krishi Sakhi</h2>
+    <a href="#">Home</a>
+    <a href="#">Chatbot</a>
+    <a href="#">Settings</a>
+    <a href="#">Profile</a>
+    <a href="#" class="active">Weather</a>
+    <a href="#">About Us</a>
+  </div>
+
+  <!-- Main Weather -->
+  <div class="main">
+    <div class="card">
+      <!-- Search -->
+      <div class="search-bar">
+        <select id="inputType" onchange="toggleInputFields()">
+          <option value="city">City</option>
+          <option value="latlon">Latitude / Longitude</option>
+          <option value="postal">Postal Code</option>
+        </select>
+
+        <input type="text" id="cityInput" placeholder="Enter city name" />
+        <div id="latlonInput" class="hidden">
+          <input type="text" id="latitude" placeholder="Latitude" />
+          <input type="text" id="longitude" placeholder="Longitude" />
+        </div>
+        <input type="text" id="postalInput" placeholder="Enter postal code" class="hidden" />
+
+        <button onclick="getWeather()">Get Weather</button>
+      </div>
+
+      <!-- Current Weather -->
+      <div class="current-weather" id="currentWeather">
+        <div class="current-temp">--°C</div>
+        <div class="current-info">Select location to see weather</div>
+      </div>
+
+      <!-- Extra details -->
+      <div class="extra-details" id="extraDetails"></div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button id="tab-temp" class="active" onclick="showChart('temp')">Temperature</button>
+        <button id="tab-precip" onclick="showChart('precip')">Precipitation</button>
+        <button id="tab-wind" onclick="showChart('wind')">Wind</button>
+      </div>
+
+      <!-- Chart -->
+      <div class="chart-container">
+        <canvas id="weatherChart" height="120"></canvas>
+      </div>
+
+      <!-- Forecast -->
+      <div class="forecast" id="forecast"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="weather.js"></script>
+</body>
+</html>
