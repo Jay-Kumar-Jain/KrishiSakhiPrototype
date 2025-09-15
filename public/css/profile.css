@@ -1,0 +1,146 @@
+body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f4ec;
+            display: flex;
+        }
+
+/* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: #2d5016;
+            color:#f3f4ec;
+            height: 100vh;
+            padding: 1rem;
+            box-sizing: border-box;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+        }
+
+
+ .sidebar-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-logo img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
+        .logo-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        .nav-menu {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            list-style: none;
+            padding: 0;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 12px 20px;
+            text-decoration: none;
+            color: #f3f4ec;
+            font-size: 16px; /* Corrected font size */
+            font-weight: 500; /* Corrected font weight */
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+            margin-bottom: 8px;
+        }
+
+        .nav-item:hover {
+            background: rgba(247, 245, 243, 0.1);
+            border-left-color: #f3f4ec;
+            padding-left: 24px;
+        }
+
+        .nav-item.active {
+            
+            font-weight: 600; /* Corrected font weight */
+        }
+/* Main Content */
+.main-content {
+  margin-left: 250px; /* same width as sidebar */
+  padding: 20px;
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center; /* centers dashboard */
+  align-items: flex-start; /* keeps content from sticking to top */
+  box-sizing: border-box;
+}
+
+.dashboard {
+  width: 100%;
+  max-width: 800px;
+}
+
+/* Farmer Profile Card */
+.card {
+  background: #f3f4ec;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+  margin-bottom: 20px;
+  color: #000;          
+  font-size: 28px;      
+  font-weight: 700;    
+  text-align: center;
+  text-transform: uppercase; 
+}
+
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #2d5016;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #f3f4ec;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: #2d5016;
+  color: #f3f4ec;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn:hover {
+  background: #2d5016;
+}

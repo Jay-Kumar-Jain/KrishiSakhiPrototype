@@ -1,0 +1,262 @@
+<!DOCTYPE html> 
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Krishi Sakhi — Market Dashboard</title>
+
+    <!-- Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <!-- Chart.js + Zoom Plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.umd.min.js"></script>
+
+    <style>
+      :root {
+        --accent: #2d5016;
+        --muted: #6b7280;
+        --card: rgba(255,255,255,0.25);
+        --radius: 12px;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+        color: #111827;
+        background: url('market.png') no-repeat center center fixed;
+        background-size: cover;
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        top:0; left:0; right:0; bottom:0;
+        backdrop-filter: blur(6px);
+        background: rgba(255,255,255,0.05);
+        z-index:0;
+      }
+
+      .app {
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        gap: 20px;
+        min-height: 100vh;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Sidebar */
+      aside.sidebar {
+        width: 250px;
+        background: var(--accent);
+        color: #f7f5f3;
+        padding: 1rem;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        z-index: 1;
+        box-sizing: border-box;
+      }
+      .sidebar-logo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+      .sidebar-logo img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: contain;
+      }
+      .logo-text {
+        font-size: 1.25rem;
+        font-weight: 700;
+        text-align: center;
+        margin-top: 10px;
+        text-transform: uppercase;
+      }
+      .nav-menu {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        list-style: none;
+        padding: 0;
+      }
+      .nav-item {
+        display: block;
+        padding: 12px 20px;
+        text-decoration: none;
+        color: #f7f5f3;
+        font-size: 16px;
+        font-weight: 500;
+        transition: all 0.3s;
+        border-left: 4px solid transparent;
+        margin-bottom: 8px;
+      }
+      .nav-item:hover {
+        background: rgba(247, 245, 243, 0.1);
+        border-left-color: #f7f5f3;
+        padding-left: 24px;
+      }
+      .nav-item.active {
+        font-weight: 600;
+      }
+
+      /* Main */
+      main { padding: 24px; }
+      .card {
+        background: var(--card);
+        backdrop-filter: blur(8px);
+        border-radius: var(--radius);
+        padding: 20px;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.15);
+        margin-bottom: 20px;
+      }
+      .filters {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .filters select,
+      .filters input {
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        min-width: 150px;
+        font-size: 14px;
+      }
+      .filters .grow { flex:1 1 320px; }
+
+      #priceChartContainer {
+        margin-top: 14px;
+        padding: 12px;
+        border-radius: 12px;
+        background: rgba(255,255,255,0.4);
+        backdrop-filter: blur(6px);
+        max-height: 460px;
+        transition: opacity 0.3s ease;
+      }
+      canvas { height: 420px; display: block; }
+
+      .table-wrap {
+        overflow-x: auto;
+        overflow-y: auto;
+        max-height: 420px;
+        margin-top: 12px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        background: rgba(255,255,255,0.35);
+        backdrop-filter: blur(6px);
+        transition: opacity 0.3s ease;
+      }
+      table.price-table { width: 100%; border-collapse: collapse; min-width: 900px; }
+      .price-table th,
+      .price-table td {
+        padding: 12px 10px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+        font-size: 13px;
+      }
+      .price-table th {
+        position: sticky;
+        top: 0;
+        background: var(--accent);
+        color: white;
+        font-weight: 700;
+        font-size: 14px;
+      }
+      .price-table th:first-child,
+      .price-table td:first-child {
+        position: sticky;
+        left: 0;
+        background: rgba(255,255,255,0.25);
+        z-index: 2;
+        backdrop-filter: blur(6px);
+      }
+      .price-table th:first-child { background: var(--accent); color: #fff; z-index: 3; }
+      .price-table tbody tr:hover { background: rgba(0,0,0,0.05); transition: background 0.2s; }
+
+      .empty { padding: 36px; text-align: center; color: #333; font-weight: 500; }
+      #lastUpdated { margin-top: 10px; font-size: 14px; color: #333; text-align: left; }
+      #loader {
+        position: absolute; top:50%; left:50%;
+        transform: translate(-50%,-50%);
+        font-size: 18px; color: var(--accent);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loader">Loading market data...</div>
+    <div class="app" style="display:none;">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-logo">
+          <img src="logo.png" alt="Krishi Sakhi Logo" />
+          <div class="logo-text"><b>KRISHI SAKHI</b></div>
+        </div>
+        <nav class="nav-menu">
+          <a href="/home" class="nav-item">HOME</a>
+          <a href="/chatbot" class="nav-item">AI CHATBOT</a>
+          <a href="/insights" class="nav-item">INSIGHTS</a>
+          <a href="/market" class="nav-item active">MARKET</a>
+          <a href="/about" class="nav-item">ABOUT US</a>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main>
+        <div class="card">
+          <div class="filters">
+            <select id="stateSelector" aria-label="Select State">
+              <option value="">Select State</option>
+            </select>
+            <select id="districtSelector" disabled aria-label="Select District">
+              <option value="">Select District</option>
+            </select>
+            <select id="marketSelector" disabled aria-label="Select Market">
+              <option value="">Select Market</option>
+            </select>
+            <input
+              id="cropInput"
+              class="grow"
+              type="text"
+              placeholder="Search crop"
+              aria-label="Search Crop"
+            />
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Market Prices</h3>
+          <div id="priceChartContainer">
+            <canvas id="marketChart"></canvas>
+            <div id="chartEmpty" class="empty">
+              Select state & district to see chart
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Live Market Data</h3>
+          <div class="table-wrap" id="tableWrap">
+            <table class="price-table">
+              <thead id="tableHead"></thead>
+              <tbody id="price-data-body"></tbody>
+            </table>
+          </div>
+          <div id="tableEmpty" class="empty">
+            Select state & district to see data
+          </div>
+          <div id="lastUpdated"></div>
+        </div>
+      </main>
+    </div>
+
+    <script src="market.js"></script>
+  </body>
+</html>

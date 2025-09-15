@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Krishi Sakhi - Signup</title>
+  <link rel="stylesheet" href="/css/signup-style.css"> <!-- ✅ Correct path -->
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-container">
+      <div class="logo-section">
+        <div class="logo-circle">
+          <img src="/images/logo.png" alt="Krishi Sakhi Logo" class="logo-img"> <!-- ✅ Correct path -->
+        </div>
+        <span class="brand-title">KRISHI SAKHI</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="main-container">
+    <div class="signup-card">
+      <h2 class="main-title">Create Account</h2>
+      <p class="subtitle">Join us today by filling out the form</p>
+
+      <!-- Signup Form -->
+      <form class="signup-form" method="POST" action="/signup">
+        <input type="text" name="name" placeholder="Full Name" required />
+        <input type="text" name="phonenumber" placeholder="Phone Number (10 digits)" required />
+        <input type="date" name="dob" required />
+        <input type="text" name="aadhar" placeholder="Aadhar Number (12 digits)" required />
+        <input type="password" name="password" placeholder="Password (min 6 chars)" required />
+        <input type="password" name="cpassword" placeholder="Confirm Password" required />
+
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+      </form>
+
+      <!-- Error Handling -->
+      {{#if error}}
+        <p class="error-msg">{{error}}</p>
+      {{/if}}
+
+      <!-- Login Redirect -->
+      <p class="login-text">
+        Already have an account?
+        <a href="/login" class="login-link">Login</a>
+      </p>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government Schemes - Kerala Farmers</title>
+    <link rel="stylesheet" href="scheme-style.css">
+</head>
+<body>
+    <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="LOGO.png" alt="Krishi Sakhi Logo">
+      <div class="logo-text"><strong>KRISHI SAKHI </strong></div>
+    </div>
+    <nav class="nav-menu">
+      <a href="/home" class="nav-item active">HOME</a>
+      <a href="/chatbot" class="nav-item">AI CHATBOT</a>
+      <a href="/settings" class="nav-item">SETTINGS</a>
+      <a href="/profile" class="nav-item">PROFILE</a>
+      <a href="/about" class="nav-item">ABOUT US</a>
+    </nav>
+  </aside>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>GOVERNMENT SCHEMES FOR KERALA FARMERS</h1>
+            <p>Find and apply for government schemes that match your eligibility criteria</p>
+        </div>
+
+        <!-- Farmer Profile Section -->
+        <div class="profile-section">
+            <div class="profile-title">Enter Your Details</div>
+            <form class="profile-form" id="farmerProfileForm">
+                <div class="form-group">
+                    <label for="age">Age *</label>
+                    <input type="number" id="age" min="18" max="100" placeholder="Enter your age" required>
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gender *</label>
+                    <select id="gender" required>
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="landSize">Land Size (acres) *</label>
+                    <input type="number" id="landSize" step="0.1" min="0" placeholder="Enter land size in acres" required>
+                </div>
+                <div class="form-group">
+                    <label for="income">Annual Income *</label>
+                    <select id="income" required>
+                        <option value="">Select Income Range</option>
+                        <option value="below-2lakh">Below ₹2 Lakh</option>
+                        <option value="2-5lakh">₹2-5 Lakh</option>
+                        <option value="5-10lakh">₹5-10 Lakh</option>
+                        <option value="above-10lakh">Above ₹10 Lakh</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="category">Social Category *</label>
+                    <select id="category" required>
+                        <option value="">Select Category</option>
+                        <option value="general">General</option>
+                        <option value="obc">OBC</option>
+                        <option value="sc">SC</option>
+                        <option value="st">ST</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="crop">Primary Crop</label>
+                    <select id="crop">
+                        <option value="">Select Primary Crop</option>
+                        <option value="rice">Rice</option>
+                        <option value="coconut">Coconut</option>
+                        <option value="rubber">Rubber</option>
+                        <option value="spices">Spices</option>
+                        <option value="vegetables">Vegetables</option>
+                        <option value="fruits">Fruits</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="district">District</label>
+                    <select id="district">
+                        <option value="">Select District</option>
+                        <option value="thiruvananthapuram">Thiruvananthapuram</option>
+                        <option value="kollam">Kollam</option>
+                        <option value="pathanamthitta">Pathanamthitta</option>
+                        <option value="alappuzha">Alappuzha</option>
+                        <option value="kottayam">Kottayam</option>
+                        <option value="idukki">Idukki</option>
+                        <option value="ernakulam">Ernakulam</option>
+                        <option value="thrissur">Thrissur</option>
+                        <option value="palakkad">Palakkad</option>
+                        <option value="malappuram">Malappuram</option>
+                        <option value="kozhikode">Kozhikode</option>
+                        <option value="wayanad">Wayanad</option>
+                        <option value="kannur">Kannur</option>
+                        <option value="kasaragod">Kasaragod</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn-find" onclick="findEligibleSchemes()">
+                        Find Eligible Schemes
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" class="results-section hidden">
+            <div class="results-header">
+                <div class="results-title">AVAILABLE SCHEMES</div>
+                <div class="results-stats" id="resultsStats"></div>
+            </div>
+            
+            <!-- Filter Buttons -->
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">ALL SCHEMES</button>
+                <button class="filter-btn" data-filter="eligible">FULLY ELIGIBLE</button>
+                <button class="filter-btn" data-filter="partially-eligible"> MOSTLY ELIGIBLE</button>
+                <button class="filter-btn" data-filter="not-eligible">NOT ELIGIBLE</button>
+            </div>
+
+            <!-- Schemes Grid -->
+            <div id="schemesGrid" class="schemes-grid"></div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading hidden">
+            <div class="loading-spinner"></div>
+            <h3>Finding eligible schemes for you...</h3>
+            <p>Please wait while we analyze your profile</p>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state hidden">
+            <div class="empty-state-icon">📋</div>
+            <h3>No Schemes Found</h3>
+            <p>Please fill in your details above to find eligible government schemes</p>
+            <button class="btn-find" onclick="document.getElementById('age').focus()">
+                Start Finding Schemes
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Government schemes data with detailed eligibility criteria
+        const governmentSchemes = [
+            {
+                id: 1,
+                name: "PM-KISAN Samman Nidhi",
+                description: "Direct income support of ₹6000 per year to small and marginal farmer families having combined land holding up to 2 hectares",
+                category: "Financial Support",
+                benefits: "₹6000 per year in 3 equal installments of ₹2000 each directly transferred to bank account",
+                eligibility: {
+                    landSize: { min: 0, max: 2 },
+                    income: ["below-2lakh", "2-5lakh"],
+                    age: { min: 18, max: 100 },
+                    gender: ["male", "female", "other"],
+                    category: ["general", "obc", "sc", "st"]
+                },
+                requiredDocuments: ["Aadhaar Card", "Bank Account Details", "Land Records", "Voter ID Card"],
+                applicationProcess: "Apply online through PM-KISAN official portal or visit nearest Common Service Center",
+                contactInfo: "Toll Free: 155261 | Email: pmkisan-ict@gov.in",
+                status: "active"
+            },
+            {
+                id: 2,
+                name: "Kerala Coconut Development Board Subsidy",
+                description: "Financial assistance for coconut cultivation, processing equipment, and value addition activities in Kerala state",
+                category: "Crop Development",
+                benefits: "Up to ₹50,000 for processing equipment, ₹25,000 for cultivation support, training programs",
+                eligibility: {
+                    landSize: { min: 0.5, max: 20 },
+                    income: ["below-2lakh", "2-5lakh", "5-10lakh"],
+                    age: { min: 21, max: 65 },
+                    gender: ["male", "female", "other"],
+                    category: ["general", "obc", "sc", "st"],
+                    crop: ["coconut"]
+                },
+                requiredDocuments: ["Land Certificate", "Bank Account Details", "Coconut Garden Registration", "Aadhaar Card"],
+                applicationProcess: "Apply through Kerala Coconut Development Board offices or online portal",
+                contactInfo: "Phone: 0484-2376265 | Website: coconutboard.gov.in",
+                status: "active"
+            },
+            {
+                id: 3,
+                name: "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+                description: "Comprehensive crop insurance scheme providing financial support against crop loss due to natural calamities, pests & diseases",
+                category: "Insurance",
+                benefits: "Crop loss coverage up to sum insured amount, premium subsidy up to 95% by government",
+                eligibility: {
+                    landSize: { min: 0.1, max: 100 },
+                    income: ["below-2lakh", "2-5lakh", "5-10lakh", "above-10lakh"],
+                    age: { min: 18, max: 75 },
+                    gender: ["male", "female", "other"],
+                    category: ["general", "obc", "sc", "st"]
+                },
+                requiredDocuments: ["Bank Account", "Land Records", "Sowing Certificate", "Aadhaar Card", "Passport Size Photo"],
+                applicationProcess: "Apply through nearest bank branch, CSC center, or state agriculture department",
+                contactInfo: "Toll Free: 14447 | Website: pmfby.gov.in",
+                status: "active"
+            },
+            {
+                id: 4,
+                name: "Women Farmers Empowerment Scheme",
+                description: "Special financial and technical support exclusively for women farmers including training, equipment, and marketing assistance",
+                category: "Women Empowerment",
+                benefits: "₹25,000 financial assistance, free training programs, equipment support, direct market linkage",
+                eligibility: {
+                    landSize: { min: 0.1, max: 5 },
+                    income: ["below-2lakh", "2-5lakh"],
+                    age: { min: 18, max: 60 },
+                    gender: ["female"],
+                    category: ["general", "obc", "sc", "st"]
+                },
+                requiredDocuments: ["Women Farmer Certificate", "Bank Account", "Land Records", "Aadhaar Card", "SHG Certificate"],
+                applicationProcess: "Apply through District Women Development Office or state government portal",
+                contactInfo: "District Women Development Office | State Helpline: 1800-425-1025",
+                status: "active"
+            },
+            {
+                id: 5,
+                name: "Kerala Spice Board Development Scheme",
+                description: "Comprehensive support for spice cultivation, processing, quality improvement, and export promotion in Kerala",
+                category: "Spice Development",
+                benefits: "Subsidy for spice processing units, quality certification support, export market assistance",
+                eligibility: {
+                    landSize: { min: 0.5, max: 10 },
+                    income: ["below-2lakh", "2-5lakh", "5-10lakh"],
+                    age: { min: 20, max: 65 },
+                    gender: ["male", "female", "other"],
+                    category: ["general", "obc", "sc", "st"],
+                    crop: ["spices"]
+                },
+                requiredDocuments: ["Spice Cultivation Certificate", "Bank Details", "Land Records", "Quality Test Certificate"],
+                applicationProcess: "Apply through Spice Board Regional Office, Kochi",
+                contactInfo: "Phone: 0484-2333610 | Email: spiceboard@nic.in",
+                status: "active"
+            },
+            {
+                id: 6,
+                name: "Rubber Plantation Development Scheme",
+                description: "Financial assistance for rubber plantation development, tapping tools, and processing facilities in Kerala state",
+                category: "Plantation Development",
+                benefits: "Subsidy for rubber plants, tapping tools, processing equipment, technical training and guidance",
+                eligibility: {
+                    landSize: { min: 1, max: 25 },
+                    income: ["below-2lakh", "2-5lakh", "5-10lakh"],
+                    age: { min: 25, max: 70 },
+                    gender: ["male", "female", "other"],
+                    category: ["general", "obc", "sc", "st"],
+                    crop: ["rubber"]
+                },
+                requiredDocuments: ["Rubber Board Registration", "Land Certificate", "Bank Account", "Soil Test Report"],
+                applicationProcess: "Apply through Rubber Board Office, Kottayam",
+                contactInfo: "Phone: 0481-2353311 | Website: rubberboard.org.in",
+                status: "active"
+            },
+            {
+                id: 7,
+                name: "Organic Farming Promotion Scheme",
+                description: "Support for farmers transitioning to organic farming methods with certification assistance and premium market access",
+                category: "Organic Agriculture",
+                benefits: "Organic certification support, premium price guarantee, training programs, input cost subsidy",
+                eligibility: {
+                    landSize: { min: 0.5, max: 15 },
+                    income: ["below-2lakh", "2-5lakh", "5-10lakh"],
+                    age: { min: 21, max: 65 },
+                    gender: ["male", "female", "other"],
+                    category: ["general", "obc", "sc", "st"]
+                },
+                requiredDocuments: ["Organic Certification Application", "Soil Test Report", "Bank Details", "Training Certificate"],
+                applicationProcess: "Apply through Kerala State Agriculture Department or certified organic agencies",
+                contactInfo: "Kerala State Agriculture Department | Phone: 0471-2305415",
+                status: "active"
+            },
+            {
+                id: 8,
+                name: "Kerala Vegetable and Fruit Promotion Scheme",
+                description: "Comprehensive support for vegetable and fruit cultivation, post-harvest management, and direct marketing",
+                category: "Horticulture Development",
+                benefits: "Subsidy for greenhouse construction, irrigation systems, processing equipment, market access",
+                eligibility: {
+                    landSize: { min: 0.25, max: 10 },
+                    income: ["below-2lakh", "2-5lakh", "5-10lakh"],
+                    age: { min: 18, max: 65 },
+                    gender: ["male", "female", "other"],
+                    category: ["general", "obc", "sc", "st"],
+                    crop: ["vegetables", "fruits"]
+                },
+                requiredDocuments: ["Horticulture Department Registration", "Land Records", "Bank Account", "Project Proposal"],
+                applicationProcess: "Apply through Kerala Vegetable and Fruit Promotion Council offices",
+                contactInfo: "Phone: 0471-2328244 | Website: keralavegetable.gov.in",
+                status: "active"
+            }
+        ];
+
+        let currentSchemes = [];
+        let farmerProfile = {};
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            setupFilterButtons();
+            displayAllSchemes();
+        });
+
+        // Setup filter button functionality
+        function setupFilterButtons() {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Filter schemes
+                    const filter = this.getAttribute('data-filter');
+                    filterSchemes(filter);
+                });
+            });
+        }
+
+        // Filter schemes based on eligibility
+        function filterSchemes(filter) {
+            const filteredSchemes = filter === 'all' 
+                ? currentSchemes 
+                : currentSchemes.filter(scheme => scheme.eligibilityStatus === filter);
+            
+            renderSchemes(filteredSchemes);
+            updateResultsStats(filteredSchemes.length, currentSchemes.length);
+        }
+
+        // Display all schemes initially (without eligibility check)
+        function displayAllSchemes() {
+            currentSchemes = governmentSchemes.map(scheme => ({
+                ...scheme,
+                eligibilityStatus: 'not-checked',
+                eligibilityDetails: null
+            }));
+            
+            document.getElementById('resultsSection').classList.remove('hidden');
+            document.getElementById('emptyState').classList.add('hidden');
+            renderSchemes(currentSchemes);
+            updateResultsStats(currentSchemes.length, currentSchemes.length);
+        }
+
+        // Find eligible schemes based on farmer profile
+        function findEligibleSchemes() {
+            // Get farmer profile data
+            farmerProfile = {
+                age: parseInt(document.getElementById('age').value),
+                gender: document.getElementById('gender').value,
+                landSize: parseFloat(document.getElementById('landSize').value),
+                income: document.getElementById('income').value,
+                category: document.getElementById('category').value,
+                crop: document.getElementById('crop').value,
+                district: document.getElementById('district').value
+            };
+
+            // Validate required fields
+            if (!farmerProfile.age || !farmerProfile.gender || isNaN(farmerProfile.landSize) || 
+                !farmerProfile.income || !farmerProfile.category) {
+                alert('Please fill in all required fields marked with *');
+                return;
+            }
+
+            // Show loading state
+            document.getElementById('loadingState').classList.remove('hidden');
+            document.getElementById('resultsSection').classList.add('hidden');
+            document.getElementById('emptyState').classList.add('hidden');
+
+            // Simulate processing time
+            setTimeout(() => {
+                processEligibility();
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('resultsSection').classList.remove('hidden');
+            }, 2000);
+        }
+
+        // Process eligibility for all schemes
+        function processEligibility() {
+            currentSchemes = governmentSchemes.map(scheme => {
+                const eligibilityResult = checkSchemeEligibility(scheme, farmerProfile);
+                return {
+                    ...scheme,
+                    eligibilityStatus: eligibilityResult.status,
+                    eligibilityDetails: eligibilityResult
+                };
+            });
+
+            // Sort by eligibility percentage (eligible first, then partially eligible, then not eligible)
+            currentSchemes.sort((a, b) => {
+                const scoreA = a.eligibilityDetails.percentage;
+                const scoreB = b.eligibilityDetails.percentage;
+                return scoreB - scoreA;
+            });
+
+            // Reset filter to show all schemes
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('[data-filter="all"]').classList.add('active');
+            
+            renderSchemes(currentSchemes);
+            updateResultsStats(currentSchemes.length, currentSchemes.length);
+        }
+
+        // Check eligibility for a single scheme
+        function checkSchemeEligibility(scheme, profile) {
+            let eligibilityScore = 0;
+            let totalCriteria = 0;
+            let metCriteria = [];
+            let unmetCriteria = [];
+            let notApplicableCriteria = [];
+
+            // Check land size
+            if (scheme.eligibility.landSize && profile.landSize !== undefined) {
+                totalCriteria++;
+                if (profile.landSize >= scheme.eligibility.landSize.min && 
+                    profile.landSize <= scheme.eligibility.landSize.max) {
+                    eligibilityScore++;
+                    metCriteria.push(`Land: ${profile.landSize} acres (Required: ${scheme.eligibility.landSize.min}-${scheme.eligibility.landSize.max} acres)`);
+                } else {
+                    unmetCriteria.push(`Land size should be ${scheme.eligibility.landSize.min}-${scheme.eligibility.landSize.max} acres (You have: ${profile.landSize} acres)`);
+                }
+            }
+
+            // Check income
+            if (scheme.eligibility.income && profile.income) {
+                totalCriteria++;
+                if (scheme.eligibility.income.includes(profile.income)) {
+                    eligibilityScore++;
+                    metCriteria.push(`Income: ${getIncomeLabel(profile.income)} ✓`);
+                } else {
+                    unmetCriteria.push(`Income criteria not met (Required: ${scheme.eligibility.income.map(getIncomeLabel).join(' or ')})`);
+                }
+            }
+
+            // Check age
+            if (scheme.eligibility.age && profile.age) {
+                totalCriteria++;
+                if (profile.age >= scheme.eligibility.age.min && 
+                    profile.age <= scheme.eligibility.age.max) {
+                    eligibilityScore++;
+                    metCriteria.push(`Age: ${profile.age} years (Required: ${scheme.eligibility.age.min}-${scheme.eligibility.age.max} years)`);
+                } else {
+                    unmetCriteria.push(`Age should be ${scheme.eligibility.age.min}-${scheme.eligibility.age.max} years (You are: ${profile.age} years)`);
+                }
+            }
+
+            // Check gender
+            if (scheme.eligibility.gender && profile.gender) {
+                totalCriteria++;
+                if (scheme.eligibility.gender.includes(profile.gender)) {
+                    eligibilityScore++;
+                    metCriteria.push(`Gender: ${profile.gender.charAt(0).toUpperCase() + profile.gender.slice(1)} ✓`);
+                } else {
+                    unmetCriteria.push(`Gender criteria not met (Required: ${scheme.eligibility.gender.join(' or ')})`);
+                }
+            }
+
+            // Check social category
+            if (scheme.eligibility.category && profile.category) {
+                totalCriteria++;
+                if (scheme.eligibility.category.includes(profile.category)) {
+                    eligibilityScore++;
+                    metCriteria.push(`Category: ${profile.category.toUpperCase()} ✓`);
+                } else {
+                    unmetCriteria.push(`Social category not eligible (Required: ${scheme.eligibility.category.map(c => c.toUpperCase()).join(' or ')})`);
+                }
+            }
+
+            // Check crop type
+            if (scheme.eligibility.crop) {
+                if (profile.crop) {
+                    totalCriteria++;
+                    if (scheme.eligibility.crop.includes(profile.crop)) {
+                        eligibilityScore++;
+                        metCriteria.push(`Crop: ${profile.crop.charAt(0).toUpperCase() + profile.crop.slice(1)} ✓`);
+                    } else {
+                        unmetCriteria.push(`Crop type not covered (Required: ${scheme.eligibility.crop.join(', ')})`);
+                    }
+                } else {
+                    notApplicableCriteria.push(`Crop specific scheme - select your primary crop to check eligibility`);
+                }
+            }
+
+            const eligibilityPercentage = totalCriteria > 0 ? Math.round((eligibilityScore / totalCriteria) * 100) : 0;
+            
+            let status = 'not-eligible';
+            let statusText = 'Not Eligible';
+            let statusColor = '#f44336';
+            
+            if (eligibilityPercentage === 100) {
+                status = 'eligible';
+                statusText = 'Fully Eligible';
+                statusColor = '#4caf50';
+            } else if (eligibilityPercentage >= 70) {
+                status = 'partially-eligible';
+                statusText = 'Mostly Eligible';
+                statusColor = '#ff9800';
+            }
+
+            return {
+                status,
+                statusText,
+                statusColor,
+                percentage: eligibilityPercentage,
+                metCriteria,
+                unmetCriteria,
+                notApplicableCriteria,
+                totalCriteria,
+                metCount: eligibilityScore
+            };
+        }
+
+        // Helper function to get readable income labels
+        function getIncomeLabel(incomeKey) {
+            const labels = {
+                'below-2lakh': 'Below ₹2 Lakh',
+                '2-5lakh': '₹2-5 Lakh',
+                '5-10lakh': '₹5-10 Lakh',
+                'above-10lakh': 'Above ₹10 Lakh'
+            };
+            return labels[incomeKey] || incomeKey;
+        }
+
+        // Render schemes in the grid
+        function renderSchemes(schemes) {
+            const grid = document.getElementById('schemesGrid');
+            
+            if (schemes.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔍</div>
+                        <h3>No Schemes Found</h3>
+                        <p>No schemes match the current filter criteria</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const html = schemes.map(scheme => `
+                <div class="scheme-card ${scheme.eligibilityStatus === 'not-checked' ? '' : scheme.eligibilityStatus}">
+                    <div class="scheme-header">
+                        <div class="scheme-title">${scheme.name}</div>
+                        ${scheme.eligibilityStatus !== 'not-checked' ? `
+                            <div class="eligibility-badge badge-${scheme.eligibilityStatus === 'eligible' ? 'eligible' : scheme.eligibilityStatus === 'partially-eligible' ? 'partial' : 'not-eligible'}">
+                                ${scheme.eligibilityDetails.statusText}
+                                ${scheme.eligibilityDetails.percentage !== undefined ? ` (${scheme.eligibilityDetails.percentage}%)` : ''}
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="scheme-category">${scheme.category}</div>
+                    <div class="scheme-description">${scheme.description}</div>
+                    
+                    <div class="scheme-benefits">
+                        <h4>BENEFITS</h4>
+                        <p>${scheme.benefits}</p>
+                    </div>
+
+                    ${scheme.eligibilityDetails && scheme.eligibilityDetails.metCriteria.length > 0 ? `
+                        <div class="eligibility-details">
+                            <div class="eligibility-title">Eligibility Status</div>
+                            <div class="eligibility-list">
+                                ${scheme.eligibilityDetails.metCriteria.map(criteria => 
+                                    `<div class="eligibility-item met">${criteria}</div>`
+                                ).join('')}
+                                ${scheme.eligibilityDetails.unmetCriteria.map(criteria => 
+                                    `<div class="eligibility-item not-met">${criteria}</div>`
+                                ).join('')}
+                                ${scheme.eligibilityDetails.notApplicableCriteria.map(criteria => 
+                                    `<div class="eligibility-item">${criteria}</div>`
+                                ).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    ${scheme.eligibilityDetails && scheme.eligibilityDetails.unmetCriteria.length > 0 ? `
+                        <div class="missing-criteria">
+                            <h4>Requirements Not Met:</h4>
+                            <ul>
+                                ${scheme.eligibilityDetails.unmetCriteria.map(criteria => 
+                                    `<li>${criteria}</li>`
+                                ).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+
+                    <div class="scheme-actions">
+                        ${scheme.eligibilityStatus === 'eligible' ? 
+                            `<button class="btn-action btn-apply" onclick="applyForScheme(${scheme.id})">
+                                 Apply Now
+                            </button>` : 
+                            `<button class="btn-action btn-details" onclick="viewSchemeDetails(${scheme.id})">
+                                 View Details
+                            </button>`
+                        }
+                        <button class="btn-action btn-documents" onclick="viewRequiredDocuments(${scheme.id})">
+                            Documents
+                        </button>
+                        ${scheme.contactInfo ? `
+                            <button class="btn-action btn-details" onclick="viewContactInfo(${scheme.id})">
+                                Contact
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+
+            grid.innerHTML = html;
+        }
+
+        // Update results statistics
+        function updateResultsStats(showing, total) {
+            const statsElement = document.getElementById('resultsStats');
+            const eligible = currentSchemes.filter(s => s.eligibilityStatus === 'eligible').length;
+            const partiallyEligible = currentSchemes.filter(s => s.eligibilityStatus === 'partially-eligible').length;
+            
+            if (currentSchemes[0] && currentSchemes[0].eligibilityStatus !== 'not-checked') {
+                statsElement.innerHTML = `
+                    Showing ${showing} of ${total} schemes | 
+                    ${eligible} Eligible | 
+                    ${partiallyEligible} Mostly Eligible
+                `;
+            } else {
+                statsElement.innerHTML = `Showing ${showing} of ${total} total schemes`;
+            }
+        }
+
+        // Action handlers
+        function applyForScheme(schemeId) {
+            const scheme = governmentSchemes.find(s => s.id === schemeId);
+            if (scheme) {
+                const message = `Ready to apply for ${scheme.name}!\n\n` +
+                    `Application Process:\n${scheme.applicationProcess}\n\n` +
+                    `Contact Information:\n${scheme.contactInfo}\n\n` +
+                    `Required Documents:\n${scheme.requiredDocuments.map((doc, i) => `${i + 1}. ${doc}`).join('\n')}\n\n` +
+                    `Would you like to proceed with the application?`;
+                
+                if (confirm(message)) {
+                    alert('Redirecting to application portal...\n\nNote: In a real implementation, this would redirect to the official government portal.');
+                }
+            }
+        }
+
+        function viewSchemeDetails(schemeId) {
+            const scheme = governmentSchemes.find(s => s.id === schemeId);
+            if (scheme) {
+                alert(`📋 ${scheme.name}\n\n` +
+                    `Description:\n${scheme.description}\n\n` +
+                    `Benefits:\n${scheme.benefits}\n\n` +
+                    `Category: ${scheme.category}\n\n` +
+                    `Contact: ${scheme.contactInfo}`);
+            }
+        }
+
+        function viewRequiredDocuments(schemeId) {
+            const scheme = governmentSchemes.find(s => s.id === schemeId);
+            if (scheme) {
+                alert(`📄 Required Documents for ${scheme.name}:\n\n` +
+                    `${scheme.requiredDocuments.map((doc, i) => `${i + 1}. ${doc}`).join('\n')}\n\n` +
+                    `Tip: Keep all documents ready in both original and photocopy format.`);
+            }
+        }
+
+        function viewContactInfo(schemeId) {
+            const scheme = governmentSchemes.find(s => s.id === schemeId);
+            if (scheme) {
+                alert(`Contact Information for ${scheme.name}:\n\n` +
+                    `${scheme.contactInfo}\n\n` +
+                    `Application Process:\n${scheme.applicationProcess}`);
+            }
+        }
+    </script>
+</body>
+</html>

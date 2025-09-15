@@ -1,0 +1,190 @@
+/* General Page Setup */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3f4ec;
+    display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #2d5016;
+    color: #f7f5f3;
+    height: 100vh;
+    padding: 1rem;
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+}
+
+.sidebar-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.sidebar-logo img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+.logo-title {
+    font-size: 1.25rem;
+    font-weight: 400; /* Not bold */
+    text-align: center;
+    margin-top: 10px;
+    text-transform: uppercase;
+}
+
+/* Navigation Menu */
+.nav-menu {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    list-style: none;
+    padding: 0;
+}
+
+.nav-item {
+    display: block;
+    padding: 12px 20px;
+    text-decoration: none;
+    color: #f7f5f3;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s;
+    border-left: 4px solid transparent;
+    margin-bottom: 8px;
+}
+
+.nav-item:hover {
+    background: rgba(247, 245, 243, 0.1);
+    border-left-color: #f7f5f3;
+    padding-left: 24px;
+}
+
+.nav-item.active {
+    
+    font-weight: 600;
+}
+
+/* Main Container */
+.main-container {
+    margin-left: 250px; /* same as sidebar width */
+    padding: 40px 20px;
+    width: calc(100% - 250px); /* full remaining width */
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+}
+
+/* Settings Card */
+.settings-card {
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    max-width: 600px;
+    width: 100%;
+    padding: 2rem;
+}
+
+.settings-card h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #111827;
+}
+
+/* Accordion */
+.accordion-item {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.accordion-header {
+    padding: 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    color: #111827;
+    transition: background 0.2s;
+}
+
+.accordion-header:hover {
+    background-color: #f9fafb;
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    padding: 0 1rem;
+    background: #f9fafb;
+}
+
+.accordion-content form {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 0;
+}
+
+.accordion-content input,
+.accordion-content select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+}
+
+.accordion-content label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.accordion-content input[type="checkbox"] {
+    accent-color: #3d6b1f;
+    width: 18px;
+    height: 18px;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 0.9rem;
+    background-color: #3d6b1f;
+    color: #fff;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #2d5016;
+}
+
+.accordion-header::after {
+    content: "\25BC";
+    transition: transform 0.3s;
+}
+
+.accordion-header.active::after {
+    transform: rotate(-180deg);
+}
+
+.btn-wrapper {
+    margin-top: 0.5rem;
+}
