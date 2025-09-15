@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Land Profile</title>
+  <link rel="stylesheet" href="land-profile.css">
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <img src="logo.png" alt="Logo">
+      <div class="logo-title"><b>KRISHI SAKHI</b></div>
+    </div>
+    <ul class="nav-menu">
+      <a href="/home" class="nav-item active">HOME</a>
+      <a href="/chatbot" class="nav-item">AI CHATBOT</a>
+      <a href="/settings" class="nav-item">SETTINGS</a>
+      <a href="/profile" class="nav-item">PROFILE</a>
+      <a href="/about" class="nav-item">ABOUT US</a>
+      
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <!-- Page Header -->
+    <header>
+      <h1>LAND PROFILE</h1>
+    </header>
+
+    <!-- Form Section -->
+    <section class="form-section">
+      <form>
+        <h2>Basic Land Details</h2>
+        
+        <label for="owner">Owner Name:</label>
+        <input type="text" id="owner" name="owner" placeholder="Enter owner's name" required>
+
+        <label for="area">Land Area (in acres):</label>
+        <input type="number" id="area" name="area" placeholder="Enter land area" required>
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" placeholder="Enter land location" required>
+
+        <label for="soil">Soil Type:</label>
+        <input type="text" id="soil" name="soil" placeholder="Enter soil type" required>
+
+        <label for="water">Water Source:</label>
+        <input type="text" id="water" name="water" placeholder="Enter water source" required>
+
+        <label for="crops">Current Crops Grown:</label>
+        <select id="crops" name="crops">
+          <option value="" disabled selected>Select a crop</option>
+          <option value="Rice">Rice</option>
+          <option value="Coconut">Coconut</option>
+          <option value="Banana">Banana</option>
+          <option value="Rubber">Rubber</option>
+          <option value="Tea">Tea</option>
+          <option value="Coffee">Coffee</option>
+          <option value="Spices">Spices (Pepper, Cardamom, etc.)</option>
+          <option value="Tapioca">Tapioca</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <input type="text" id="other-crop" name="other-crop" placeholder="If other, enter crop name">
+
+        <button type="submit">Save Land Profile</button>
+      </form>
+    </section>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Krishi Sakhi - Home</title>
+  <link rel="stylesheet" href="/css/home-style.css"> <!-- ✅ Correct path -->
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-container">
+      <!-- Logo -->
+      <div class="logo-section">
+        <div class="logo-circle">
+          <img src="/images/logo.png" alt="Krishi Sakhi Logo" class="logo-img"> <!-- ✅ Correct path -->
+        </div>
+        <span class="brand-title">KRISHI SAKHI</span>
+      </div>
+
+      <!-- Logout -->
+      <div class="logout-section">
+        <a href="/logout" class="btn-logout">Logout</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="main-container">
+    <h2>Welcome, {{user.name}} 👋</h2>
+
+    <!-- ✅ Land Details -->
+    <section class="land-section">
+      <h3>Your Land Profiles</h3>
+      {{#if lands.length}}
+        <ul class="land-list">
+          {{#each lands}}
+            <li>
+              <strong>{{landLocation}}</strong> - {{landSize}} acres ({{landType}})
+              <br>
+              Water Source: {{waterSource}}
+              <br>
+              Crop: {{cropDetails}}
+            </li>
+          {{/each}}
+        </ul>
+      {{else}}
+        <p>No land profiles added yet. <a href="/land-profile">Add one</a></p>
+      {{/if}}
+    </section>
+
+    <!-- ✅ Navigation -->
+    <section class="nav-section">
+      <h3>Quick Access</h3>
+      <nav>
+        <ul>
+          <li><a href="/chatbot">Chatbot</a></li>
+          <li><a href="/market">Market</a></li>
+          <li><a href="/weather">Weather</a></li>
+          <li><a href="/schemes">Govt Schemes</a></li>
+          <li><a href="/activity-tracker">Activity Tracker</a></li>
+          <li><a href="/reminder">Reminders</a></li>
+          <li><a href="/settings">Settings</a></li>
+          <li><a href="/aboutus">About Us</a></li>
+        </ul>
+      </nav>
+    </section>
+  </main>
+</body>
+</html>

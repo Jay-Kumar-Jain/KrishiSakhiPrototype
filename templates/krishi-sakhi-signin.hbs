@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Krishi Sakhi - Agricultural Platform</title>
+  <meta name="description" content="Krishi Sakhi - Empowering farmers with modern agricultural solutions and technology">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f7f9f5;
+      color: #2d2d2d;
+    }
+
+    /* Header */
+    .header {
+      background: #2d5016;
+      padding: 1rem 2rem;
+      color: #fff;
+    }
+
+    .header-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo-circle {
+      width: 60px;
+      height: 60px;
+      background: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .logo-img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+    }
+
+    .language-selector {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .globe-icon {
+      stroke: #fff;
+    }
+
+    /* Main Layout */
+    .main-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem 1rem;
+      min-height: calc(100vh - 80px);
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      max-width: 1100px;
+      width: 100%;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    /* Left Section */
+    .left-section {
+      background: #f0f6ed;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .main-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #2d5016;
+      margin-bottom: 1.5rem;
+    }
+
+    .image-container {
+      max-width: 400px;
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .landscape-image {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Right Section */
+    .right-section {
+      padding: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+    }
+
+    .buttons-container {
+      width: 100%;
+      max-width: 350px;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .button-section {
+      text-align: center;
+    }
+
+    .section-label {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      color: #444;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.9rem 1.8rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .btn-outline {
+      border: 2px solid #2d5016;
+      color: #2d5016;
+      background: transparent;
+    }
+
+    .btn-outline:hover {
+      background: #2d5016;
+      color: #fff;
+    }
+
+    .btn-primary {
+      background: #2d5016;
+      color: #fff;
+      border: 2px solid #2d5016;
+    }
+
+    .btn-primary:hover {
+      background: #3b6d22;
+      border-color: #3b6d22;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+      .left-section {
+        display: none; /* hide left image on small screens */
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-container">
+      <!-- Logo -->
+      <div class="logo-section">
+        <div class="logo-circle">
+          <img src="LOGO.png" alt="Krishi Sakhi Logo" class="logo-img">
+        </div>
+      </div>
+
+      <!-- Language Selector -->
+      <div class="language-selector">
+        <span class="language-text">LANGUAGE</span>
+        <svg class="globe-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-container">
+    <div class="content-grid">
+      <!-- Left Section -->
+      <div class="left-section">
+        <h1 class="main-title">KRISHI SAKHI</h1>
+        <div class="image-container">
+          <img src="homepage.jpg" alt="Agricultural landscape" class="landscape-image">
+        </div>
+      </div>
+
+      <!-- Right Section -->
+      <div class="right-section">
+        <div class="buttons-container">
+          <!-- Sign In -->
+          <div class="button-section">
+            <p class="section-label">ALREADY REGISTERED USER</p>
+            <a class="btn btn-outline" href="/login">SIGN IN</a>
+          </div>
+
+          <!-- Sign Up -->
+          <div class="button-section">
+            <p class="section-label">NEW USER REGISTER</p>
+            <a class="btn btn-primary" href="/signup">SIGN UP</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

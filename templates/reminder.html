@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity Reminders</title>
+  <link rel="stylesheet" href="reminder.css">
+  <script src="https://kit.fontawesome.com/yourkit.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <!-- Sidebar (fixed on left) -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="logo.png" alt="Krishi Sakhi Logo">
+      <div class="logo-text"><b>KRISHI SAKHI</b></div>
+    </div>
+    <nav class="nav-menu">
+      <a href="/home" class="nav-item ">HOME</a>
+      <a href="/chatbot" class="nav-item">AI CHATBOT</a>
+      <a href="/settings" class="nav-item">SETTINGS</a>
+      <a href="/profile" class="nav-item">PROFILE</a>
+      <a href="/about" class="nav-item">ABOUT US</a>
+    </nav>
+  </aside>
+
+  <!-- Main content (to the right of sidebar) -->
+  <main>
+    <header>
+      <h1>ACTIVITY REMINDERS</h1>
+    </header>
+
+    <!-- Active Reminders -->
+    <section>
+      <h2 class="active-title">🟢 Active Reminders</h2>
+      <div class="reminder-list active-list" id="activeReminders">
+        <div class="reminder-item" data-datetime="2025-09-15T08:00">
+          <span class="reminder-text">Irrigation for paddy field</span>
+          <span class="reminder-status"></span>
+        </div>
+        <div class="reminder-item" data-datetime="2025-09-16T10:30">
+          <span class="reminder-text">Apply organic fertilizer</span>
+          <span class="reminder-status"></span>
+        </div>
+        <div class="reminder-item" data-datetime="2025-09-17T07:00">
+          <span class="reminder-text">Weeding in vegetable patch</span>
+          <span class="reminder-status"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Missed Reminders -->
+    <section>
+      <h2 class="warning-title">⚠️ Missed Activities</h2>
+      <div class="reminder-list warning-list" id="missedReminders">
+        <div class="reminder-item" data-datetime="2025-09-05T09:00" data-completed="false">
+          <span class="reminder-text">Pest control for rice</span>
+          <span class="reminder-status"></span>
+        </div>
+        <div class="reminder-item" data-datetime="2025-09-07T14:00" data-completed="false">
+          <span class="reminder-text">Harvest cucumbers</span>
+          <span class="reminder-status"></span>
+        </div>
+        <div class="reminder-item" data-datetime="2025-09-09T11:00" data-completed="false">
+          <span class="reminder-text">Check soil moisture</span>
+          <span class="reminder-status"></span>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

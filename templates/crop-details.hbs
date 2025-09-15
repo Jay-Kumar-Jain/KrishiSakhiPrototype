@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CROP DETAILS</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Background Blur Layer */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url("farm.png") no-repeat center center fixed;
+      background-size: cover;
+      filter: blur(6px) brightness(0.7);
+      z-index: -2;
+    }
+
+    /* Soft White Overlay */
+    body::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.35);
+      z-index: -1;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background-color: #2d5016;
+      color: #f7f5f3;
+      height: 100vh;
+      padding: 1rem;
+      box-sizing: border-box;
+      position: fixed;
+      top: 0;
+      left: 0;
+      overflow-y: auto;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .sidebar-logo img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+
+    .logo-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      text-align: center;
+      margin-top: 10px;
+      text-transform: uppercase;
+    }
+
+    .nav-menu {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      list-style: none;
+      padding: 0;
+    }
+
+    .nav-item {
+      display: block;
+      padding: 12px 20px;
+      text-decoration: none;
+      color: #f7f5f3;
+      font-size: 16px;
+      font-weight: 500;
+      transition: all 0.3s;
+      border-left: 4px solid transparent;
+      margin-bottom: 8px;
+    }
+
+    .nav-item:hover {
+      background: rgba(247, 245, 243, 0.1);
+      border-left-color: #f7f5f3;
+      padding-left: 24px;
+    }
+
+    .nav-item.active {
+      background: rgba(247, 245, 243, 0.15);
+      border-left-color: #f7f5f3;
+      font-weight: 600;
+    }
+
+    /* Main Content */
+    .content {
+      margin-left: 250px;
+      flex: 1;
+      padding: 2rem;
+      font-size: 16px;
+    }
+
+    .header {
+      background: #2d5016;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: bold;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+
+    .section {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+      max-width: 700px;
+    }
+
+    .section h3 {
+      margin-bottom: 1rem;
+      color: #2d5016;
+    }
+
+    select {
+      width: 100%;
+      padding: 0.7rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .btn {
+      background: #2d5016;
+      color: #fff;
+      padding: 0.8rem 1.2rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: #3b6d22;
+    }
+
+    .result {
+      display: none;
+      background: #eef6ec;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      border-left: 5px solid #2d5016;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .result h4 {
+      margin: 0.5rem 0;
+      color: #2d5016;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="logo.png" alt="Krishi Sakhi Logo" />
+      <div class="logo-title"><b>KRISHI SAKHI</b></div>
+    </div>
+
+    <nav class="nav-menu">
+      <a href="/home" class="nav-item">HOME</a>
+      <a href="/chatbot" class="nav-item">CHATBOT</a>
+      <a href="/settings" class="nav-item">SETTINGS</a>
+      <a href="/profile" class="nav-item">PROFILE</a>
+      <a href="/about" class="nav-item">ABOUT US</a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="content">
+    <div class="header">CROP DETAILS</div>
+
+    <div class="section">
+      <h3>Select Crop</h3>
+      <select id="cropSelect">
+        <option value="">-- Choose a crop --</option>
+        <option value="rice">Rice (Paddy)</option>
+        <option value="coconut">Coconut</option>
+        <option value="banana">Banana</option>
+        <option value="pepper">Black Pepper</option>
+        <option value="ginger">Ginger</option>
+        <option value="turmeric">Turmeric</option>
+        <option value="cardamom">Cardamom</option>
+        <option value="rubber">Rubber</option>
+        <option value="tea">Tea</option>
+        <option value="coffee">Coffee</option>
+      </select>
+
+      <button class="btn" onclick="showRecommendation()">Get Details</button>
+      <div id="result" class="result"></div>
+    </div>
+  </div>
+
+  <!-- Script -->
+  <script>
+    function showRecommendation() {
+      const crop = document.getElementById("cropSelect").value;
+      const resultBox = document.getElementById("result");
+      let recommendation = "";
+
+      switch(crop) {
+        case "rice":
+          recommendation = `<h4>🌾 Rice (Paddy)</h4>
+            <b>Best Season:</b> June–August & Nov–Dec <br>
+            <b>Duration:</b> 100–150 days <br>
+            <b>Climate:</b> Warm, humid, high rainfall <br>
+            <b>Soil:</b> Clayey, loamy <br>
+            <b>Best Grown In:</b> Kuttanad, Palakkad, Thrissur <br>
+            <b>Diseases:</b> Blast, Brown spot, Bacterial blight <br>
+            <b>Prevention:</b> Resistant varieties, fungicide seed treatment, balanced fertilizer.`;
+          break;
+
+        case "coconut":
+          recommendation = `<h4>🥥 Coconut</h4>
+            <b>Season:</b> Year-round (best June–July) <br>
+            <b>Duration:</b> 6–10 years to yield <br>
+            <b>Climate:</b> Tropical, humid <br>
+            <b>Soil:</b> Sandy loam, laterite <br>
+            <b>Best Grown In:</b> Kasaragod, Kozhikode, Kollam, Alappuzha <br>
+            <b>Diseases:</b> Root wilt, Bud rot, Stem bleeding <br>
+            <b>Prevention:</b> Sanitation, fungicide drenching, drainage, neem cake.`;
+          break;
+
+        case "banana":
+          recommendation = `<h4>🍌 Banana</h4>
+            <b>Season:</b> June–Sept <br>
+            <b>Duration:</b> 10–12 months <br>
+            <b>Climate:</b> Humid, warm (20–35°C) <br>
+            <b>Soil:</b> Well-drained loamy <br>
+            <b>Best Grown In:</b> Thiruvananthapuram, Wayanad, Thrissur <br>
+            <b>Diseases:</b> Panama wilt, Bunchy top virus <br>
+            <b>Prevention:</b> Tissue-cultured plants, rotation, bio-control.`;
+          break;
+
+        case "pepper":
+          recommendation = `<h4>🌿 Black Pepper</h4>
+            <b>Season:</b> June–July <br>
+            <b>Duration:</b> 3–4 years to yield <br>
+            <b>Climate:</b> Humid, shade loving <br>
+            <b>Soil:</b> Fertile loamy <br>
+            <b>Best Grown In:</b> Idukki, Wayanad, Kozhikode <br>
+            <b>Diseases:</b> Quick wilt, Pollu disease <br>
+            <b>Prevention:</b> Drainage, Bordeaux mixture, resistant varieties.`;
+          break;
+
+        case "ginger":
+          recommendation = `<h4>🫚 Ginger</h4>
+            <b>Season:</b> April–May <br>
+            <b>Duration:</b> 8–10 months <br>
+            <b>Climate:</b> Warm & humid <br>
+            <b>Soil:</b> Well-drained loamy <br>
+            <b>Best Grown In:</b> Wayanad, Kozhikode, Palakkad <br>
+            <b>Diseases:</b> Soft rot, Bacterial wilt <br>
+            <b>Prevention:</b> Trichoderma treatment, raised beds, rotation.`;
+          break;
+
+        case "turmeric":
+          recommendation = `<h4>🌱 Turmeric</h4>
+            <b>Season:</b> April–June <br>
+            <b>Duration:</b> 7–9 months <br>
+            <b>Climate:</b> Warm & humid <br>
+            <b>Soil:</b> Fertile loamy <br>
+            <b>Best Grown In:</b> Idukki, Wayanad, Palakkad <br>
+            <b>Diseases:</b> Leaf spot, Rhizome rot <br>
+            <b>Prevention:</b> Fungicide seed treatment, mulching, neem cake.`;
+          break;
+
+        case "cardamom":
+          recommendation = `<h4>🌿 Cardamom</h4>
+            <b>Season:</b> June–July <br>
+            <b>Duration:</b> 2–3 years to yield <br>
+            <b>Climate:</b> Cool, humid, shady <br>
+            <b>Soil:</b> Rich forest loam <br>
+            <b>Best Grown In:</b> Idukki, Wayanad <br>
+            <b>Diseases:</b> Capsule rot, Leaf blotch <br>
+            <b>Prevention:</b> Shade regulation, Trichoderma, drainage.`;
+          break;
+
+        case "rubber":
+          recommendation = `<h4>🌳 Rubber</h4>
+            <b>Season:</b> June–July <br>
+            <b>Duration:</b> 6–7 years to yield <br>
+            <b>Climate:</b> Warm, moist <br>
+            <b>Soil:</b> Laterite, loamy <br>
+            <b>Best Grown In:</b> Kottayam, Pathanamthitta, Kollam <br>
+            <b>Diseases:</b> Leaf fall, Powdery mildew <br>
+            <b>Prevention:</b> Fungicide, pruning, sanitation.`;
+          break;
+
+        case "tea":
+          recommendation = `<h4>🍃 Tea</h4>
+            <b>Season:</b> Year-round (best June–Sept) <br>
+            <b>Duration:</b> 3–5 years to yield <br>
+            <b>Climate:</b> Cool, humid, high-altitude <br>
+            <b>Soil:</b> Acidic loamy <br>
+            <b>Best Grown In:</b> Idukki, Wayanad <br>
+            <b>Diseases:</b> Blister blight, Root rot <br>
+            <b>Prevention:</b> Fungicide, resistant varieties, shade regulation.`;
+          break;
+
+        case "coffee":
+          recommendation = `<h4>☕ Coffee</h4>
+            <b>Season:</b> June–July <br>
+            <b>Duration:</b> 3–4 years to yield <br>
+            <b>Climate:</b> Humid, shaded <br>
+            <b>Soil:</b> Rich, well-drained <br>
+            <b>Best Grown In:</b> Wayanad, Idukki <br>
+            <b>Diseases:</b> Coffee rust, Berry borer <br>
+            <b>Prevention:</b> Copper fungicides, pruning, shade management.`;
+          break;
+
+        default:
+          recommendation = "⚠️ Please select a crop.";
+      }
+
+      resultBox.innerHTML = recommendation;
+      resultBox.style.display = "block";
+    }
+  </script>
+</body>
+</html>
